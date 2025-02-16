@@ -32,12 +32,10 @@ Choix des gares grâce aux deux iputs et des dates grâce aux bouton départ et 
 
 ### Footer
 
-Footer permatant la navigation entre les différents page (le bouton et la page offre ne sont pas implémentés)
-
+Footer permettant la navigation entre les différentes pages (le bouton et la page offre ne sont pas implémentés).
 ### Page d'affichage des billets 
 
-Page récapitulant les gares et dates choisis sur la partie haute et affichant les différents billets sous forme de MaterialCard avec Gare de départ, d'arrivée, durée, type de train et prix. 
-
+Page récapitulant les gares et dates choisies sur la partie haute et affichant les différents billets sous forme de MaterialCard avec gare de départ, d'arrivée, durée, type de train et prix. 
  <img src="imagesreadme/trajlist.png" alt="Accueil" width="45%" />
 
 ### Page profil
@@ -63,6 +61,8 @@ L'application utilise l'autocomplétion pour les champs de saisie sur la page d'
 Exemple de code pour l'autocomplétion :
 ```java
 // MainActivity.java
+
+// Fonction gérant l'autocomplétion des inputs et la récupération des ids de gare correspondant
 private void setupAutoComplete(AutoCompleteTextView editText) {
     editText.setThreshold(2); // Démarre la suggestion après 2 lettres
 
@@ -92,6 +92,7 @@ private void setupAutoComplete(AutoCompleteTextView editText) {
     });
 }
 
+// Fonction de gestion des requêtes API pour la suggestion des gares selon l'input de l'utilisateur
 private void fetchStationSuggestions(String query, AutoCompleteTextView editText) {
     service.getStations(query).enqueue(new Callback<PlaceResponse>() {
         @Override
@@ -172,6 +173,8 @@ Les trajets récupérés via l'API SNCF sont affichés dans l'application. Les u
 Exemple de code pour l'affichage des trajets :
 ```java
 // AfficheTrajets.java
+
+// Fonction de gestion des requêtes API pour les différents trajets selon les infos
 private void fetchJourneys(String villedep, String villarr, String from, String to, String datet) {
     String datetime = convertToApiDateFormat(datet);
     Call<JourneyResponse> call = service.getJourneys(from, to, datetime);
@@ -202,6 +205,7 @@ private void fetchJourneys(String villedep, String villarr, String from, String 
     });
 }
 
+//convertion de la date au format de l'API pour la requête
 private String convertToApiDateFormat(String inputDate) {
     try {
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -214,6 +218,7 @@ private String convertToApiDateFormat(String inputDate) {
     }
 }
 
+// EXtraction de l'heure pour l'affichage 
 private String extractHour(String dateTime) {
     try {
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.getDefault());
@@ -249,24 +254,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
     adapter = new TicketAdapter(this, tickets);
     listeTickets.setAdapter(adapter);
-
-    bottomNavigationView = findViewById(R.id.footer);
-
-    // Gérer la navigation dans le footer
-    bottomNavigationView.setOnItemSelectedListener(item -> {
-        if (item.getItemId() == R.id.nav_voyager) {
-            Intent intent = new Intent(ShowTikets.this, MainActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
-        if (item.getItemId() == R.id.nav_compte) {
-            Intent intent = new Intent(ShowTikets.this, ProfileActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        return false;
-    });
+    ...
 }
 ```
 
