@@ -17,9 +17,18 @@ Pour configurer le projet avec Android Studio, suivez les étapes suivantes :
 
 ## Interface UI
 
-### Acceuil avec inputs et datepiker 
+### Acceuil de l'app
 
-Choix des gares et de la date de départ pour rechercher les trajets.
+Choix des gares grâce aux deux iputs et des dates grâce aux bouton départ et arrivée qui affichent des MaterailDatePicker.
+
+<p align="center">
+  <img src="imagesreadme/accueil.png" alt="Accueil" width="45%" />
+  <img src="imagesreadme/acceuilerr.png" alt="Erreur Accueil" width="45%" />
+</p>
+<p align="center">
+  <img src="imagesreadme/autocomp1.png" alt="Autocomplétion 1" width="45%" />
+  <img src="imagesreadme/autocomp2.png" alt="Autocomplétion 2" width="45%" />
+</p>
 
 ### Footer
 
@@ -29,22 +38,31 @@ Footer permatant la navigation entre les différents page (le bouton et la page 
 
 Page récapitulant les gares et dates choisis sur la partie haute et affichant les différents billets sous forme de MaterialCard avec Gare de départ, d'arrivée, durée, type de train et prix. 
 
+ <img src="imagesreadme/trajlist.png" alt="Accueil" width="45%" />
+
 ### Page profil
 
 Page récapitulant les infos du profil utilisateur
 
+ <img src="imagesreadme/profil.png" alt="Accueil" width="45%" />
 
-## Fonctionnalités Backend
+ ### Liste des billets
 
-### Autocomplétion des inputs de l'accueil
+Page listant les différents billets réservés
+
+<img src="imagesreadme/billetlist.png" alt="Accueil" width="45%" />
+
+
+## Fonctionnalités Backend et explication du code
+
+### Input avec autocomplétion et suggestions 
 
 L'application utilise l'autocomplétion pour les champs de saisie sur la page d'accueil. Cela permet aux utilisateurs de saisir rapidement des informations en leur proposant des suggestions basées sur les entrées précédentes ou des données prédéfinies.
+
 
 Exemple de code pour l'autocomplétion :
 ```java
 // MainActivity.java
-
-//Gérer l'appel à fetchStationSuggestions et les données qui en résultent pour l'afficher en suggestion des inputs
 private void setupAutoComplete(AutoCompleteTextView editText) {
     editText.setThreshold(2); // Démarre la suggestion après 2 lettres
 
@@ -56,7 +74,7 @@ private void setupAutoComplete(AutoCompleteTextView editText) {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             String query = s.toString().trim();
             if (query.length() >= 2) {
-                fetchStationSuggestions(query, editText); // Appel à la fonction de requêtes API
+                fetchStationSuggestions(query, editText);
             }
         }
 
@@ -74,8 +92,6 @@ private void setupAutoComplete(AutoCompleteTextView editText) {
     });
 }
 
-
-//Gérer les requêtes API pour la suggestion des gares
 private void fetchStationSuggestions(String query, AutoCompleteTextView editText) {
     service.getStations(query).enqueue(new Callback<PlaceResponse>() {
         @Override
@@ -114,27 +130,26 @@ Exemple de code pour l'intégration API SNCF :
 ```java
 // SncfApiService.java
 public interface SncfApiService {
-    @GET("v1/coverage/sncf/journeys") // URL pour les requêtes des trajets (utile pour a liste des trajets disponibles)
+    @GET("v1/coverage/sncf/journeys")
     Call<JourneyResponse> getJourneys(
             @Query("from") String from,
             @Query("to") String to,
             @Query("datetime") String datetime
     );
 
-    @GET("v1/coverage/sncf/places") // URL pour les requêtes des gares (pour l'autocomplétion)
+    @GET("v1/coverage/sncf/places")
     Call<PlaceResponse> getStations(@Query("q") String query);
 }
 
 // SncfApiClient.java
 public class SncfApiClient {
-    private static final String BASE_URL = "https://api.sncf.com/"; // URL de base pour l'API
+    private static final String BASE_URL = "https://api.sncf.com/";
 
     public static Retrofit getClient(String apiKey) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
                     Request original = chain.request();
                     Request request = original.newBuilder()
-                            //Définition du header avec la clé API en Base64 et build de la requête
                             .header("Authorization", "Basic " + Base64.encodeToString((apiKey + ":").getBytes(), Base64.NO_WRAP))
                             .build();
                     return chain.proceed(request);
@@ -187,8 +202,6 @@ private void fetchJourneys(String villedep, String villarr, String from, String 
     });
 }
 
-
-// Convertion du format de la date pour la requête API utilisant un format particulier
 private String convertToApiDateFormat(String inputDate) {
     try {
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -201,7 +214,6 @@ private String convertToApiDateFormat(String inputDate) {
     }
 }
 
-//extraction de l'heure de la date pour l'affichage
 private String extractHour(String dateTime) {
     try {
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.getDefault());
@@ -237,11 +249,28 @@ protected void onCreate(Bundle savedInstanceState) {
 
     adapter = new TicketAdapter(this, tickets);
     listeTickets.setAdapter(adapter);
-    ...
+
+    bottomNavigationView = findViewById(R.id.footer);
+
+    // Gérer la navigation dans le footer
+    bottomNavigationView.setOnItemSelectedListener(item -> {
+        if (item.getItemId() == R.id.nav_voyager) {
+            Intent intent = new Intent(ShowTikets.this, MainActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (item.getItemId() == R.id.nav_compte) {
+            Intent intent = new Intent(ShowTikets.this, ProfileActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return false;
+    });
 }
 ```
 
-### Utilisation de Retrofit
+## Utilisation de Retrofit
 
 Retrofit est utilisé pour effectuer des appels API vers l'API SNCF. Il simplifie la gestion des requêtes HTTP et la conversion des réponses JSON en objets Java.
 
@@ -271,32 +300,9 @@ public class SncfApiClient {
 }
 ```
 
-### Navigation dans le footer
-
-La navigation dans le footer est gérée de la façon suivante
-```java
-// Gérer la navigation dans le footer
-    bottomNavigationView.setOnItemSelectedListener(item -> {
-        if (item.getItemId() == R.id.nav_voyager) { // nav_voyager pour le bouton voyager menant à l'accueil
-            Intent intent = new Intent(ShowTikets.this, MainActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
-        if (item.getItemId() == R.id.nav_compte) { // nav_compte pour le bouton profil
-            Intent intent = new Intent(ShowTikets.this, ProfileActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
-        ... // Autres boutons si besoins
-        return false;
-    });
-```
-
 ## Améliorations possibles
 
-### Réservation fonctionnelle
+### Réservation qui marche
 
 Ajouter la fonctionnalité de réservation pour permettre aux utilisateurs de réserver des billets directement depuis l'application.
 
@@ -307,9 +313,3 @@ Améliorer la gestion et l'affichage des billets pour offrir une meilleure expé
 ### Modification du profil
 
 Permettre aux utilisateurs de modifier leurs informations de profil directement depuis l'application, y compris la mise à jour de leur photo de profil et d'autres détails personnels.
-
-### Amélioration de l'UI
-
-Des améliorations de l'UI peuvent être pertinantes notament pour la liste des billets qui est une UI basique. 
-
-
