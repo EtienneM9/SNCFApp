@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Main Background -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/skyblue" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+    <!-- Perforated Top Edge -->
+    <item android:top="240dp" android:bottom="0dp" android:left="0dp" android:right="0dp">
+        <shape android:shape="line">
+            <stroke
+                android:width="2dp"
+                android:color="@color/white"
+                android:dashWidth="8dp"
+                android:dashGap="8dp" />
+        </shape>
+    </item>
+    <!-- Perforated Bottom Edge -->
+    <item android:top="250dp" android:bottom="-8dp" android:left="0dp" android:right="0dp">
+        <shape android:shape="line">
+            <stroke
+                android:width="2dp"
+                android:color="@color/white"
+                android:dashWidth="8dp"
+                android:dashGap="8dp" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="whiteborder">#C3FFFFFF</color>
+    <color name="darkblue">#03021D</color>
+    <color name="lightgreen">#14D405</color>
+    <color name="light_grey">#AEAEAE</color>
+    <color name="light_blue">#0C0026</color>
+    <color name="dark_grey">#1E1E1E</color>
+    <color name="skyblue">#B0CBF6</color>
+    <color name="pink">#97FF00C8</color>
+    <color name="acccol">#7C0353FF</color>
+</resources>

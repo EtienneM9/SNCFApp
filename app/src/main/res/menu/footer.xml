@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_voyager"
+        android:icon="@drawable/voyager"
+        android:title="Voyager" />
+
+    <item
+        android:id="@+id/nav_billets"
+        android:icon="@drawable/qrcode"
+        android:title="Billets" />
+
+    <item
+        android:id="@+id/nav_offres"
+        android:icon="@drawable/magazine"
+        android:title="Offres" />
+
+    <item
+        android:id="@+id/nav_compte"
+        android:icon="@drawable/profil"
+        android:title="Compte" />
+</menu>

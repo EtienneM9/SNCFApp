@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@drawable/ticket_shape"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Destination principale -->
+    <TextView
+        android:id="@+id/tv_destination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Voyage à..."
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Détails : heure + gare -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_depart_heure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="18:11"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_depart_gare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" - Gare de Paris Montparnasse"
+            android:textColor="@color/light_grey"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_arrivee_heure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="21:01"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_arrivee_gare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" - Saint-Malo"
+            android:textColor="@color/light_grey"
+            android:textSize="14sp" />
+    </LinearLayout>
+    <!-- Line -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/perforated_line" />
+
+    <!-- Bouton Voir le billet -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_voir_billet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/darkblue"
+        android:text="Voir votre billet"
+        android:textColor="@color/white" />
+</LinearLayout>
